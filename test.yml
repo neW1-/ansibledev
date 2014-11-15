@@ -1,0 +1,9 @@
+- name: Yum preflight check (avoids some issues on some machines)
+  command: yum clean all
+- name: Apply OS updates
+  command: yum -y --skip-broken --disablerepo=* --enablerepo=centos-{{ansible_lsb.major_release}}-updates-x86_64 --enablerepo=centos-{{ansible_lsb.major_release}}-x86_64 update
+  async: 3600
+  poll: 30
+# --skip-broken is not ideal only use until we fix the rsyslog problem in 5.x
+# # This doesn't seeem to work
+# #   yum: name='*' disablerepo=* enablerepo=centos-5-updates-x86_64,centos-5-x86_64 state=latest
